@@ -1,0 +1,31 @@
+@use "./../../helpers/mixins" as m;
+@use "./../../helpers/variables" as v;
+@use "./../Sidebar/sidebar" as s;
+@use "./../Topbar/topbar" as t;
+
+.layout {
+  width: 100%;
+  height: auto;
+  min-height: 200vh;
+  display: grid;
+  grid-template-areas:
+    "sidebar topbar"
+    "sidebar content";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+
+  .topbar {
+    grid-area: topbar;
+    @include t.topbar();
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    @include s.sidebar();
+  }
+
+  .content {
+    width: 100%;
+    grid-area: content;
+  }
+}
