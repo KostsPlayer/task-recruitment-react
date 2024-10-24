@@ -27,7 +27,7 @@ function Sidebar() {
             </span>
             <span className="text">Dashboard</span>
           </NavLink>
-          <NavLink className="menu-list-item" to={"/"}>
+          <NavLink className="menu-list-item" to={"/task-recruitment-react"}>
             <span className="icon">
               <Users size={20} strokeWidth={1.5} />
             </span>

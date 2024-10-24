@@ -5,6 +5,7 @@ import Layout from "../../components/Layout/Layout";
 import image from "../../assets/images/user.png";
 import InsertData from "./Crud/Insert";
 import UpdateData from "./Crud/Update";
+import { useSearch } from "../../helpers/SearchContext";
 
 function UsersManagement() {
   axios.defaults.withCredentials = true;
@@ -13,6 +14,8 @@ function UsersManagement() {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [getData, setGetData] = useState([]);
   const [dataId, setDataId] = useState(null);
+
+  const { search } = useSearch();
 
   const getAllData = useCallback(() => {
     axios
@@ -77,44 +80,58 @@ function UsersManagement() {
               <div className="row">Address</div>
               <div className="row">Action</div>
             </div>
-            {getData.map((data, index) => (
-              <div className="tbody" key={index}>
-                <div className="col">{index + 1}</div>
-                <div className="col">
-                  <div className="avatar">
-                    <img src={image} alt="image-user" />
+            {getData
+              .filter((item) => {
+                const searchLower = search.toLowerCase();
+                return (
+                  item.name.toLowerCase().includes(searchLower) ||
+                  item.email.toLowerCase().includes(searchLower) ||
+                  item.phone.toLowerCase().includes(searchLower) ||
+                  item.alamat.toLowerCase().includes(searchLower)
+                );
+              })
+              .map((data, index) => (
+                <div className="tbody" key={index}>
+                  <div className="col">{index + 1}</div>
+                  <div className="col">
+                    <div className="avatar">
+                      <img src={image} alt="image-user" />
+                    </div>
+                    <span className="name">{data.name}</span>
+                    <span className="email">{data.email}</span>
                   </div>
-                  <span className="name">{data.name}</span>
-                  <span className="email">{data.email}</span>
+                  <div className="col">{data.phone}</div>
+                  {data.name === "Muhammad Azka Nuril Islami" ? (
+                    <div className="col">Ceo</div>
+                  ) : (
+                    <div className="col">Employee</div>
+                  )}
+                  <div className="col">{data.alamat}</div>
+                  <div className="col">
+                    <div
+                      className="edit"
+                      onClick={() => {
+                        setOpenUpdateModal(true);
+                        setDataId(data.id);
+                      }}
+                    >
+                      <span className="icon">
+                        <Pencil strokeWidth={2} size={16} />
+                      </span>
+                    </div>
+                    <div
+                      className="delete"
+                      onClick={() => {
+                        handleDelete(data.id);
+                      }}
+                    >
+                      <span className="icon">
+                        <Trash strokeWidth={2} size={16} />
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="col">{data.phone}</div>
-                <div className="col">Employee</div>
-                <div className="col">{data.alamat}</div>
-                <div className="col">
-                  <div
-                    className="edit"
-                    onClick={() => {
-                      setOpenUpdateModal(true);
-                      setDataId(data.id);
-                    }}
-                  >
-                    <span className="icon">
-                      <Pencil strokeWidth={2} size={16} />
-                    </span>
-                  </div>
-                  <div
-                    className="delete"
-                    onClick={() => {
-                      handleDelete(data.id);
-                    }}
-                  >
-                    <span className="icon">
-                      <Trash strokeWidth={2} size={16} />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
         <InsertData

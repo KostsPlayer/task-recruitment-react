@@ -1,15 +1,26 @@
 import React from "react";
 import user from "./../../assets/images/user.png";
 import { Search, Bell, EllipsisVertical } from "lucide-react";
+import { useSearch } from "../../helpers/SearchContext";
 
 function Topbar() {
+  const { setSearch } = useSearch();
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
   return (
     <div className="topbar">
       <div className="topbar-search">
         <button>
           <Search strokeWidth={1.5} size={20} />
         </button>
-        <input type="text" placeholder="Search Keyword..." />
+        <input
+          type="text"
+          onChange={handleSearch}
+          placeholder="Search Keyword..."
+        />
       </div>
       <div className="topbar-other">
         <div className="notification">
