@@ -8,7 +8,6 @@ import UpdateData from "./Crud/Update";
 import { useSearch } from "../../helpers/SearchContext";
 import Pagination from "../../components/Pagination/Pagination";
 import { toastMessage } from "../../helpers/AlertMessage";
-import { ToastContainer } from "react-toastify";
 
 function UsersManagement() {
   axios.defaults.withCredentials = true;
@@ -60,7 +59,6 @@ function UsersManagement() {
 
   return (
     <>
-      <ToastContainer />
       <Layout>
         <div className="users">
           <div className="users-header">
