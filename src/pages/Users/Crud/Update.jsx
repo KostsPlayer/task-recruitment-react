@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Modal from "../../../components/Modal/Modal";
+import { validationSchema } from "../../../helpers/ValidationSchema";
+import { toastMessage } from "../../../helpers/AlertMessage";
 
 export default function UpdateData({ onOpen, onClose, dataId, refreshData }) {
   axios.defaults.withCredentials = true;
@@ -8,9 +10,10 @@ export default function UpdateData({ onOpen, onClose, dataId, refreshData }) {
   const [data, setData] = useState({
     Name: "",
     Email: "",
-    Phone: "",
+    Phone: null,
     Alamat: "",
   });
+
 
   const getDataById = useCallback(() => {
     if (dataId) {
@@ -46,54 +49,75 @@ export default function UpdateData({ onOpen, onClose, dataId, refreshData }) {
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      axios
-        .put(`https://msg.ulbi.ac.id/task/recruitment?id=${dataId}`, data)
-        .then((res) => {
-          if (res.data) {
-            refreshData();
-            onClose();
-          }
+
+      validationSchema
+        .validate(data, { abortEarly: false })
+        .then(() => {
+          axios
+            .put(`https://msg.ulbi.ac.id/task/recruitment?id=${dataId}`, data)
+            .then((res) => {
+              if (res.data) {
+                toastMessage("success", "Data has been successfully updated!");
+                onClose();
+                refreshData();
+              }
+            })
+            .catch((err) => {
+              toastMessage("error", "Failed to update data!");
+            });
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((errors) => {
+          errors.inner.forEach((error) => {
+            toastMessage("error", error.message);
+          });
         });
     },
-    [dataId, data, getDataById]
+    [validationSchema, data, dataId, onClose, refreshData, toastMessage]
   );
 
   return (
-    <Modal titleModal="Update Data" onOpen={onOpen} onClose={onClose}>
-      <form className="modal-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="Name"
-          placeholder="Name"
-          onChange={handleChange}
-          value={data.Name || ""}
-        />
-        <input
-          type="email"
-          name="Email"
-          placeholder="Email"
-          onChange={handleChange}
-          value={data.Email || ""}
-        />
-        <input
-          type="number"
-          name="Phone"
-          placeholder="Phone"
-          onChange={handleChange}
-          value={data.Phone || ""}
-        />
-        <input
-          type="text"
-          name="Alamat"
-          placeholder="Address"
-          onChange={handleChange}
-          value={data.Alamat || ""}
-        />
-        <button type="submit">Update</button>
-      </form>
-    </Modal>
+    <>
+      <Modal
+        titleModal="Update Data"
+        onOpen={onOpen}
+        onClose={onClose}
+        displayMessage={toastMessage}
+      >
+        <form className="modal-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="Name"
+            autoComplete="name"
+            placeholder="Name"
+            onChange={handleChange}
+            value={data.Name || ""}
+          />
+          <input
+            type="email"
+            name="Email"
+            autoComplete="email"
+            placeholder="Email"
+            onChange={handleChange}
+            value={data.Email || ""}
+          />
+          <input
+            type="number"
+            name="Phone"
+            autoComplete="tel"
+            placeholder="Phone"
+            onChange={handleChange}
+            value={data.Phone || ""}
+          />
+          <input
+            type="text"
+            name="Alamat"
+            placeholder="Address"
+            onChange={handleChange}
+            value={data.Alamat || ""}
+          />
+          <button type="submit">Update</button>
+        </form>
+      </Modal>
+    </>
   );
 }

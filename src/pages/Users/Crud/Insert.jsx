@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Modal from "../../../components/Modal/Modal";
+import { validationSchema } from "../../../helpers/ValidationSchema";
+import { toastMessage } from "../../../helpers/AlertMessage";
 
 export default function InsertData({ onOpen, onClose, refreshData }) {
   axios.defaults.withCredentials = true;
@@ -8,9 +10,20 @@ export default function InsertData({ onOpen, onClose, refreshData }) {
   const [data, setData] = useState({
     Name: "",
     Email: "",
-    Phone: "",
+    Phone: null,
     Alamat: "",
   });
+
+  useEffect(() => {
+    if (onOpen) {
+      setData({
+        Name: "",
+        Email: "",
+        Phone: null,
+        Alamat: "",
+      });
+    }
+  }, [onOpen]);
 
   const handleChange = (e) => {
     setData({
@@ -23,50 +36,69 @@ export default function InsertData({ onOpen, onClose, refreshData }) {
     (e) => {
       e.preventDefault();
 
-      axios
-        .post("https://msg.ulbi.ac.id/task/recruitment", data)
-        .then((res) => {
-          if (res.data) {
-            refreshData();
-            onClose();
-          }
+      validationSchema
+        .validate(data, { abortEarly: false })
+        .then(() => {
+          axios
+            .post("https://msg.ulbi.ac.id/task/recruitment", data)
+            .then((res) => {
+              if (res.data) {
+                toastMessage("success", "Data has been successfully added!");
+                onClose();
+                refreshData();
+              }
+            })
+            .catch((err) => {
+              toastMessage("error", "Failed to add data!");
+            });
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((errors) => {
+          errors.inner.forEach((error) => {
+            toastMessage("error", error.message);
+          });
         });
     },
-    [data]
+    [validationSchema, data, onClose, refreshData, toastMessage]
   );
 
   return (
-    <Modal titleModal="Insert Data" onOpen={onOpen} onClose={onClose}>
-      <form className="modal-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="Name"
-          placeholder="Name"
-          onChange={handleChange}
-        />
-        <input
-          type="Email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="Phone"
-          placeholder="Phone Number"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="Alamat"
-          placeholder="Address"
-          onChange={handleChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
-    </Modal>
+    <>
+      <Modal titleModal="Insert Data" onOpen={onOpen} onClose={onClose}>
+        <form className="modal-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            autoComplete="name"
+            name="Name"
+            placeholder="Name"
+            value={data.Name}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            autoComplete="email"
+            name="Email"
+            placeholder="Email"
+            value={data.Email}
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            autoComplete="tel"
+            name="Phone"
+            placeholder="Phone Number"
+            value={data.Phone === null ? "" : data.Phone}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="Alamat"
+            placeholder="Address"
+            value={data.Alamat}
+            onChange={handleChange}
+          />
+          <button type="submit">Submit</button>
+        </form>
+      </Modal>
+    </>
   );
 }

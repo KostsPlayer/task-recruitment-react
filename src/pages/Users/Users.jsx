@@ -6,6 +6,9 @@ import image from "../../assets/images/user.png";
 import InsertData from "./Crud/Insert";
 import UpdateData from "./Crud/Update";
 import { useSearch } from "../../helpers/SearchContext";
+import Pagination from "../../components/Pagination/Pagination";
+import { toastMessage } from "../../helpers/AlertMessage";
+import { ToastContainer } from "react-toastify";
 
 function UsersManagement() {
   axios.defaults.withCredentials = true;
@@ -14,6 +17,8 @@ function UsersManagement() {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [getData, setGetData] = useState([]);
   const [dataId, setDataId] = useState(null);
+  const [currentData, setCurrentData] = useState([]);
+  const [indexFirstItem, setIndexFirstItem] = useState(0);
 
   const { search } = useSearch();
 
@@ -40,15 +45,22 @@ function UsersManagement() {
       .then((res) => {
         if (res.data) {
           getAllData();
+          toastMessage("success", "Data has been successfully deleted!");
         }
       })
       .catch((err) => {
-        console.error(err);
+        toastMessage("error", "Failed to delete data!");
       });
   }, []);
 
+  const handlePageDataChange = (currentData, indexOfFirstItem) => {
+    setCurrentData(currentData);
+    setIndexFirstItem(indexOfFirstItem);
+  };
+
   return (
     <>
+      <ToastContainer />
       <Layout>
         <div className="users">
           <div className="users-header">
@@ -80,7 +92,7 @@ function UsersManagement() {
               <div className="row">Address</div>
               <div className="row">Action</div>
             </div>
-            {getData
+            {currentData
               .filter((item) => {
                 const searchLower = search.toLowerCase();
                 return (
@@ -92,7 +104,7 @@ function UsersManagement() {
               })
               .map((data, index) => (
                 <div className="tbody" key={index}>
-                  <div className="col">{index + 1}</div>
+                  <div className="col">{indexFirstItem + index + 1}</div>
                   <div className="col">
                     <div className="avatar">
                       <img src={image} alt="image-user" />
@@ -115,9 +127,7 @@ function UsersManagement() {
                         setDataId(data.id);
                       }}
                     >
-                      <span className="icon">
-                        <Pencil strokeWidth={2} size={16} />
-                      </span>
+                      <Pencil className="icon" strokeWidth={2} size={16} />
                     </div>
                     <div
                       className="delete"
@@ -125,14 +135,17 @@ function UsersManagement() {
                         handleDelete(data.id);
                       }}
                     >
-                      <span className="icon">
-                        <Trash strokeWidth={2} size={16} />
-                      </span>
+                      <Trash className="icon" strokeWidth={2} size={16} />
                     </div>
                   </div>
                 </div>
               ))}
           </div>
+          <Pagination
+            data={getData}
+            itemsPerPage={5}
+            onPageDataChange={handlePageDataChange}
+          />
         </div>
         <InsertData
           onOpen={openCreateModal}

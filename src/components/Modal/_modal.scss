@@ -1,7 +1,9 @@
 @use "./../../helpers/mixins" as m;
 @use "./../../helpers/variables" as v;
+@use "./modal-media" as modal-m;
 
 .overlay-modal {
+  @include modal-m.modal-media();
   position: fixed;
   top: 0;
   left: 0;
@@ -73,7 +75,7 @@
       button {
         @include input-button();
         color: #fff;
-        background-color: rgba($color: #000, $alpha: 0.5);
+        background-color: rgba($color: map-get(v.$color, "blue"), $alpha: 0.7);
         border: none;
         cursor: pointer;
         position: relative;
@@ -87,7 +89,7 @@
           height: 100%;
           top: 0;
           left: -5%;
-          background-color: rgba($color: #000, $alpha: 0.8);
+          background-color: map-get(v.$color, "blue");
           transform: scaleY(0);
           transform-origin: bottom center;
           transition: transform 0.4s ease-out;

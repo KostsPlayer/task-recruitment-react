@@ -1,10 +1,10 @@
 @use "./../../helpers/mixins" as m;
 @use "./../../helpers/variables" as v;
-@use "./dashboard-media" as dashboard-m;
+@use "./settings-media" as settings-m;
 
-.dashboard {
+.settings {
   @include m.flex($justify: flex-start);
-  @include dashboard-m.dashboard-media();
+  @include settings-m.settings-media();
 
   &-header {
     width: 100%;

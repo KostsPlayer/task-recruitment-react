@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import user from "./../../assets/images/user.png";
-import { Search, Bell, EllipsisVertical } from "lucide-react";
+import { Search, Bell, EllipsisVertical, Menu } from "lucide-react";
 import { useSearch } from "../../helpers/SearchContext";
+import { toastMessage } from "../../helpers/AlertMessage";
 
-function Topbar() {
+function Topbar({ onHamburgerClick }) {
   const { setSearch } = useSearch();
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
 
+  const handleInfoAlert = useCallback(() => {
+    toastMessage("info", "This feature is under development!", "top-center");
+  }, [toastMessage]);
+
   return (
     <div className="topbar">
       <div className="topbar-search">
         <button>
-          <Search strokeWidth={1.5} size={20} />
+          <Search className="icon" strokeWidth={1.5} size={20} />
         </button>
         <input
           type="text"
@@ -23,10 +28,18 @@ function Topbar() {
         />
       </div>
       <div className="topbar-other">
-        <div className="notification">
-          <Bell strokeWidth={1.5} size={20} />
-          <div className="active"></div>
-        </div>
+        <Bell
+          className="notification"
+          strokeWidth={1.5}
+          size={20}
+          onClick={handleInfoAlert}
+        />
+        <Menu
+          className="hamburger"
+          strokeWidth={1.5}
+          size={20}
+          onClick={onHamburgerClick}
+        />
         <div className="line"></div>
         <div className="profile">
           <div className="image">
@@ -37,7 +50,7 @@ function Topbar() {
             <span className="job">CEO</span>
           </div>
         </div>
-        <span className="option">
+        <span className="option" onClick={handleInfoAlert}>
           <EllipsisVertical strokeWidth={1.5} size={20} />
         </span>
       </div>

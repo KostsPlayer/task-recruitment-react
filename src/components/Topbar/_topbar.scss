@@ -4,14 +4,13 @@
 @mixin topbar() {
   width: 100%;
   padding: 0 v.$px-topbar-content;
-  height: 13.5vh;
+  height: v.$h-topbar-sidebar;
   @include m.flex($justify: space-between);
   border-bottom: 0.15vw solid #ddd;
 
   &-search {
     width: 40vw;
     @include m.flex($justify: flex-start);
-    border-radius: 0.6vw;
     gap: 0.1vw;
 
     button {
@@ -42,20 +41,16 @@
     gap: 1vw;
 
     .notification {
-      position: relative;
       cursor: pointer;
       @include m.flex();
-      
-      .active {
-        position: absolute;
-        top: 0.4vh;
-        right: 0.2vw;
-        @include m.circle($size: 0.6vw);
-        border: 0.15vw solid #fff;
-        background-color: #f00;
-      }
     }
-    
+
+    .hamburger {
+      display: none !important;
+      cursor: pointer;
+      @include m.flex();
+    }
+
     .line {
       width: 0.1vw;
       height: 5vh;

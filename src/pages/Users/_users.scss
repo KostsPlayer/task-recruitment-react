@@ -1,14 +1,16 @@
 @use "./../../helpers/mixins" as m;
 @use "./../../helpers/variables" as v;
+@use "./users-media" as users-m;
 
 .users {
+  @include users-m.users-media();
   @include m.flex($direction: column, $align: flex-start);
 
   &-header {
     width: 100%;
     @include m.flex($justify: space-between);
-    background-color: #f6f8fa;
-    padding: v.$pt-sidebar-content v.$px-topbar-content;
+    background-color: map-get($map: v.$color, $key: "light-grey");
+    padding: v.$py-sidebar-content v.$px-topbar-content;
     border-bottom: 0.15vw solid #ddd;
 
     .menu {
@@ -64,13 +66,13 @@
 
   &-table {
     width: 100%;
-    padding: v.$pt-sidebar-content v.$px-topbar-content;
+    padding: v.$py-sidebar-content v.$px-topbar-content;
     @include m.flex($direction: column, $align: flex-start);
 
     .thead {
       width: 100%;
       display: grid;
-      grid-template-columns: 1fr 5fr 3fr 3fr 3fr 2fr;
+      grid-template-columns: 1fr 5fr 3fr 2fr 3fr 2fr;
 
       .row {
         font-size: 1.1vw;
@@ -80,7 +82,7 @@
           $color: map-get($map: v.$color, $key: "other-blue"),
           $alpha: 0.2
         );
-        padding: 2vh 0;
+        padding: 2vh 1.2vw;
 
         &:nth-child(1) {
           @include m.flex();
@@ -96,6 +98,7 @@
         }
 
         &:nth-child(6) {
+          @include m.flex($justify: flex-start);
           border-top-right-radius: 0.6vw;
           border-bottom-right-radius: 0.6vw;
         }
@@ -103,15 +106,15 @@
     }
 
     .tbody {
-      width: 100%;
+      width: 100% ;
       display: grid;
-      grid-template-columns: 1fr 5fr 3fr 3fr 3fr 2fr;
+      grid-template-columns: 1fr 5fr 3fr 2fr 3fr 2fr;
       border-bottom: #ddd solid 0.15vw;
 
       .col {
         font-size: 1.1vw;
         color: rgba($color: #000, $alpha: 0.8);
-        padding: 2vh 0;
+        padding: 2vh 1.2vw;
         font-weight: 500;
 
         &:nth-child(1) {
@@ -158,10 +161,10 @@
           @include m.flex($justify: flex-start);
           column-gap: 0.25vw;
 
-          @mixin action() {
-            column-gap: 0.3vw;
+          @mixin action($color) {
             padding: 0.4vw;
-            border: #000 solid 0.15vw;
+            border: $color solid 0.15vw;
+            color: $color;
             border-radius: 0.3vw;
             cursor: pointer;
 
@@ -171,11 +174,11 @@
           }
 
           .edit {
-            @include action();
+            @include action($color: map-get(v.$color, "orange"));
           }
 
           .delete {
-            @include action();
+            @include action($color: map-get(v.$color, "red"));
           }
         }
       }
