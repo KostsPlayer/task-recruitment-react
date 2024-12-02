@@ -12,7 +12,7 @@ import "./main.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/task-recruitment-react">
       <SearchProvider>
         <Routes>
           <Route
