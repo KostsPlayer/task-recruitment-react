@@ -1,6 +1,6 @@
 import React from "react";
 import { CalendarDays } from "lucide-react";
-import Layout from "../../components/Layout/Layout";
+import Layout from "@/components/Layout/Layout";
 
 function Schedule() {
   return (

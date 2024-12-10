@@ -1,18 +1,18 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import UsersManagement from "./pages/Users/Users";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Performance from "./pages/Performance/Performance";
-import Schedule from "./pages/Schedule/Schedule";
-import ControllSettings from "./pages/Settings/Settings";
-import Error404 from "./pages/Error404/Error404";
-import { SearchProvider } from "./helpers/SearchContext";
-import "./main.css";
+import UsersManagement from "@/pages/Users/Users";
+import Dashboard from "@/pages/Dashboard/Dashboard";
+import Performance from "@/pages/Performance/Performance";
+import Schedule from "@/pages/Schedule/Schedule";
+import ControllSettings from "@/pages/Settings/Settings";
+import Error404 from "@/pages/Error404/Error404";
+import { SearchProvider } from "@/helpers/SearchContext";
+import "@/main.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter basename="/task-recruitment-react">
+    <BrowserRouter>
       <SearchProvider>
         <Routes>
           <Route

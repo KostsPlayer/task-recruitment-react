@@ -1,6 +1,6 @@
 import React from "react";
 import { Settings } from "lucide-react";
-import Layout from "../../components/Layout/Layout";
+import Layout from "@/components/Layout/Layout";
 
 function ControllSettings() {
   return (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import Modal from "../../../components/Modal/Modal";
-import { validationSchema } from "../../../helpers/ValidationSchema";
-import { toastMessage } from "../../../helpers/AlertMessage";
+import Modal from "@/components/Modal/Modal";
+import { validationSchema } from "@/helpers/ValidationSchema";
+import { toastMessage } from "@/helpers/AlertMessage";
 
 export default function InsertData({ onOpen, onClose, refreshData }) {
   axios.defaults.withCredentials = true;

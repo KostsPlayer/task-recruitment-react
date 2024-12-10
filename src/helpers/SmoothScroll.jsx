@@ -1,4 +1,4 @@
-import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
+import { useIsomorphicLayoutEffect } from "@/helpers/useIsomorphicLayoutEffect";
 import Lenis from "lenis";
 
 export default function SmoothScroll() {

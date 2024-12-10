@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Plus, Users, Pencil, Trash } from "lucide-react";
-import Layout from "../../components/Layout/Layout";
-import image from "../../assets/images/user.png";
+import Layout from "@/components/Layout/Layout";
+import image from "@/assets/images/user.png";
 import InsertData from "./Crud/Insert";
 import UpdateData from "./Crud/Update";
-import { useSearch } from "../../helpers/SearchContext";
-import Pagination from "../../components/Pagination/Pagination";
-import { toastMessage } from "../../helpers/AlertMessage";
+import { useSearch } from "@/helpers/SearchContext";
+import Pagination from "@/components/Pagination/Pagination";
+import { toastMessage } from "@/helpers/AlertMessage";
 
 function UsersManagement() {
   axios.defaults.withCredentials = true;
